@@ -19,6 +19,7 @@ async def on_message(message):
     await message.channel.send('Life is a party and I am a pinata')
   if message.content.startswith("$sed"):
     for i in range(10):
-      await message.channel.send('SED LYF <:Sad:652380607103500299>  <a:pepecri:805748915126140928> ')
+      await message.channel.send('SED LYF')
+      await message.channel.send('<:weeb1:814435206797983745><:weeb2:814435207456489492> ')
 keep_alive()
 client.run(os.getenv("TOKEN"))
