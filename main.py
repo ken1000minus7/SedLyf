@@ -1,5 +1,6 @@
 import discord
 import os
+from keep_alive import keep_alive
 client=discord.Client()
 @client.event
 async def on_ready():
@@ -19,5 +20,5 @@ async def on_message(message):
   if message.content.startswith("$sed"):
     for i in range(10):
       await message.channel.send('SED LYF <:Sad:652380607103500299>  <a:pepecri:805748915126140928> ')
-
+keep_alive()
 client.run(os.getenv("TOKEN"))
