@@ -21,5 +21,15 @@ async def on_message(message):
     for i in range(10):
       await message.channel.send('SED LYF')
       await message.channel.send('<:weeb1:814435206797983745><:weeb2:814435207456489492> ')
+  if message.content.startswith("$joke"):
+    await message.channel.send("My life isn't a joke. Jokes have meaning")
+  if message.content.startswith("$ihateu"):
+    await message.channel.send("Yeah, I know. I hate me too.")
+  if message.content.startswith("$funny"):
+    await message.channel.send("The only time I’m funny is when I insult myself")
+  if message.content.startswith("$useless"):
+    await message.channel.send("I'm not totally useless. I can be used as a bad example")
+  if message.content.startswith("$dreams"):
+    await message.channel.send("Give up on your dreams and die")
 keep_alive()
 client.run(os.getenv("TOKEN"))
