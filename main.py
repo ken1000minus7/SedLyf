@@ -1,7 +1,18 @@
 import discord
 import os
+import random
 from keep_alive import keep_alive
 client=discord.Client()
+g=["sed","killme","sad","depress"]
+sed=["I am not alone vro, loneliness is always with me",
+'Yes, I am studying but "stu" is silent',
+'The only time I was wanted was when I was playing GTA',
+'Life is a party and I am a pinata',
+"My life isn't a joke. Jokes have meaning",
+"You hate me? Yeah, I know. I hate me too.",
+"The only time I’m funny is when I insult myself",
+"I'm not totally useless. I can be used as a bad example",
+"Give up on your dreams and die"]
 @client.event
 async def on_ready():
   print("We have logged in as {0.user}".format(client))
@@ -17,7 +28,7 @@ async def on_message(message):
     await message.channel.send('The only time I was wanted was when I was playing GTA')
   if message.content.startswith("$life"):
     await message.channel.send('Life is a party and I am a pinata')
-  if message.content.startswith("$sed"):
+  if message.content.startswith("$sedlyf"):
     for i in range(10):
       await message.channel.send('SED LYF')
       await message.channel.send('<:weeb1:814435206797983745><:weeb2:814435207456489492> ')
@@ -31,5 +42,8 @@ async def on_message(message):
     await message.channel.send("I'm not totally useless. I can be used as a bad example")
   if message.content.startswith("$dreams"):
     await message.channel.send("Give up on your dreams and die")
+  if message.content.startswith("$sed") or any(word in message.content for word in g):
+    sedword=random.choice(sed)
+    await message.channel.send(sedword)
 keep_alive()
 client.run(os.getenv("TOKEN"))
