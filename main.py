@@ -7,14 +7,60 @@ from keep_alive import keep_alive
 
 client=discord.Client()
 
-""""
-bot=commands.Bot(command_prefix="$")
+# intents = discord.Intents.default()
+# intents.members = True
+# bot=commands.Bot(command_prefix="$",intents=intents)
 
-@bot.command(name="test")
+# @bot.command()
 
-async def test(ctx,arg):
-  await ctx.send(arg)
-"""
+# async def test(ctx,arg):
+#   await ctx.send(arg)
+
+#Function for converting normal text to cool text - contributed by ishwar
+
+letters = {
+    'a':'<a:mra:838794840049188995>',
+    'b':'<a:mrb:838794853466898454>',
+    'c':'<a:mrc:695498871656415242>', #yet to fix
+    'd':'<a:mrd:838794871618797609>',
+    'e':'<a:mre:838794883124166676>',
+    'f':'<a:mrf:838794896487219211>',
+    'g':'<a:mrg:838794906456686652>',
+    'h':'<a:mrh:838794914191900742>',
+    'i':'<a:mri:838794920847605780>',
+    'j':'<a:mrj:838794927600959549>',
+    'k':'<a:mrk:838794941265084446>',
+    'l':'<a:mrl:838794949729320970>',
+    'm':'<a:mrm:838794955794546689>',
+    'n':'<a:mrn:838794964355383307>',
+    'o':'<a:mro:838794972190081024>',
+    'p':'<a:mrp:838794979052093480>',
+    'q':'<a:mrq:838794986375217212>',
+    'r':'<a:mrr:838794994147131423>',
+    's':'<a:mrs:838795001168527401>',
+    't':'<a:mrt:838795007624216638>',
+    'u':'<a:mru:838795015392067625>',
+    'v':'<a:mrv:838795023906373653>',
+    'w':'<a:mrw:838795029899378809>',
+    'x':'<a:mrx:838795043069493299>',
+    'y':'<a:mry:838795049382051881>',
+    'z':'<a:mrz:695510969950142534>'  #yet to fix
+}
+
+def one(char, d):
+    if char not in d:
+      return char
+    return d[char]
+def convert(a):
+    s = ""
+    space=0
+    for i in range(len(a)):
+      if a[i] not in letters:
+        space+=1
+      s += one(a[i], letters)
+    if space==len(a):
+      return "Vro give some argument, you can't expect me to read your mind."
+    return s
   
 #List of sed words
 
@@ -60,6 +106,13 @@ async def on_message(message):
   if message.author==client.user:
     return 
   
+  """
+  if message.content.startswith("$check"):
+    embeded=discord.Embed(color=0x7289DA)
+    embeded.add_field(name="Let's check this",value="SedLyf op",inline=False)
+    print(embeded)
+  
+  """
   #Sending sed lines based on command
 
   if message.content.startswith("$alone"):
@@ -129,6 +182,18 @@ async def on_message(message):
   if any(word in message.content for word in ["@everyone","@here"]) and message.mention_everyone==False:
     await message.add_reaction('<:weeb1:814435206797983745>')
     await message.channel.send("Vro you're not popular enough to tag everyone")
+
+  #Converting someone message to cool text
+  
+  if message.content.startswith("$cool"):
+    m=message.content.lower()
+    if len(m)==5:
+      await message.channel.send("Vro give some argument, you can't expect me to read your mind.")
+    elif m[5]!=" " and m[5]!="\n":
+      await message.channel.send("Vro add space between the command and your argument")
+    else:
+      cool=convert(m[6:])
+      await message.channel.send(cool)
 
 
 #Make the bot run continuosly
