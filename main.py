@@ -3,6 +3,11 @@ from discord.ext import commands
 import os
 import random
 from keep_alive import keep_alive
+import gspread
+
+gc=gspread.service_account(filename="sssheet.json")
+sh=gc.open("sssheet").sheet1
+data=sh.get_all_records()
 
 
 client=discord.Client()
@@ -42,10 +47,12 @@ letters = {
     'u':'<a:mru:838795015392067625>',
     'v':'<a:mrv:838795023906373653>',
     'w':'<a:mrw:838795029899378809>',
-    'x':'<a:mrx:838795043069493299>',
+    'x':'<a:mrx:838855265604075530>',
     'y':'<a:mry:838795049382051881>',
     'z':'<a:mrz:838840987610382366>'
 }
+
+ss={}
 
 def one(char, d):
     if char not in d:
@@ -113,6 +120,9 @@ async def on_message(message):
     print(embeded)
   
   """
+  if message.content.startswith("$sedlyf") and message.author.id==731204368593846312:
+    await message.channel.send("Shut up meandeep")
+    return
   #Sending sed lines based on command
 
   if message.content.startswith("$alone"):
@@ -159,10 +169,10 @@ async def on_message(message):
   #Sending gif based on command
 
 
-  if any(word in message.content for word in ["sorry","Sorry","SORRY"]):
+  if message.content.startswith("$sorry"):
     await message.channel.send(random.choice(sorry))
 
-  if any(word in message.content for word in ["ok","Ok","OK"]):
+  if message.content.startswith("$ok"):
     await message.channel.send(random.choice(ok))  
   
   #Sending message when a user is tagged 
@@ -194,6 +204,74 @@ async def on_message(message):
     else:
       cool=convert(m[6:])
       await message.channel.send(cool)
+  
+  if message.content.startswith("$fine"):
+    await message.channel.send("https://cdn.discordapp.com/attachments/798458622836867094/861846938491551774/744496273976983622.png")
+
+  if message.content.startswith("$ss"):
+    command=message.content[4:]
+    if(command.startswith("add")):
+      if(len(command)<5 or command[4]==" "):
+        await message.channel.send("Give a name to the ss")
+      elif(len(message.attachments)):
+        sh.insert_row([command[4:],message.attachments[0].url],2)
+        data.append({"NAME":command[4:],"SSURL":message.attachments[0].url})
+        await message.channel.send("The following ss has been successfully added with name "+command[4:]+"\n"+message.attachments[0].url)
+      else:
+        await message.channel.send("Add some attachment with your message")
+    elif command.startswith("list"):
+      msg="```List of ss available\n\n"
+      for i in range(len(data)):
+        msg+=data[i]["NAME"]+"\n"
+      msg+="```"
+      await message.channel.send(msg)
+    elif command.startswith("delete") and message.author.id==428956244238270475:
+      if(len(command)<8 or command[7]==" "):
+        await message.channel.send("Mention the name of the ss you want to delete")
+      else:
+        found=False
+        d=sh.get_all_records()
+        for i in range(len(d)):
+          if d[i]["NAME"]==command[7:]:
+            found=True
+            sh.delete_row(i+2)
+            d.pop(i)
+            for i in range(len(data)):
+              if data[i]["NAME"]==command[7:]:
+                data.pop(i)
+                break
+            await message.channel.send("SS with name "+command[7:]+" successfully deleted")
+            break
+        if not found:
+          await message.channel.send("No ss available with this name")
+    elif command.startswith("delete") and message.author.id!=428956244238270475:
+      await message.channel.send("Shut up nab. You're not authorized to delete")
+  if(message.content.startswith(";") and message.content.endswith(";")):
+    command=message.content
+    if(len(command)<3 or command[1]==" "):
+      await message.channel.send("Mention name of the ss")
+    else:
+      found=False
+      for i in range(len(data)):
+        if command[1:len(command)-1]==data[i]["NAME"]:
+          found=True 
+          webhooks=await message.channel.webhooks()
+          webhook=discord.utils.get(webhooks,name="SedLyf")
+          if webhook is None:
+            webhook = await message.channel.create_webhook(name="SedLyf")
+          name=message.author.nick
+          if name is None:
+            name=message.author.name
+          # await message.channel.send(data[i]["SSURL"])
+          await webhook.send(data[i]["SSURL"], username=name ,avatar_url=message.author.avatar_url)
+          await message.delete()
+          break  
+      if not found:
+        await message.channel.send("No ss available with this name")
+        
+
+    
+    
 
 
 #Make the bot run continuosly
