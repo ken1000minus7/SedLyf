@@ -1,0 +1,11 @@
+Flask>=2.0.1
+cloudant>=2.13.0
+discord.py>=1.6.0
+dinteractions-Paginator>=1.2.4
+discord>=1.7.3
+discord-components==2.0.4
+discord-py-slash-command>=3.0.1
+discord.py>=1.7.3
+PyNaCl>=1.4.0
+gspread>=4.0.1
+youtube-dl>=2021.6.6
