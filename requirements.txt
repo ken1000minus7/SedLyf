@@ -8,4 +8,5 @@ discord-py-slash-command>=3.0.1
 discord.py>=1.7.3
 PyNaCl>=1.4.0
 gspread>=4.0.1
+
 youtube-dl>=2021.6.6

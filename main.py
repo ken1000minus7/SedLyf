@@ -22,6 +22,7 @@ import requests
 import json
 from keep_alive import keep_alive
 import gspread
+from GridBoard import GridSpoilerGame
 
 gc=gspread.service_account(filename="sheetss.json")
 sh=gc.open("ss sheet").sheet1
@@ -949,7 +950,19 @@ async def define(ctx,*arg):
     listpages.append(page)
   await Paginator(bot=bot,ctx=ctx,pages=listpages,timeout=60).run()
 
+
+@bot.command(name="gs",aliases=["gridspoiler","siprickroll","sr"])
+
+async def gridspoiler(ctx,rickrolls=2,sips=3):
+  grid = GridSpoilerGame(rickrolls,sips)
+  await ctx.send(grid)
+
 guild_ids=[798268746744594465]
+
+@slash.slash(name="gridspoiler",description="Found out the puzzle pieces from the spoilers, beware of rickrolls")
+async def _gridspoiler(ctx,rickrolls=2,sips=3):
+  grid = GridSpoilerGame(rickrolls,sips)
+  await ctx.send(grid)
 
 @slash.slash(name="sssearch",description="Search for name of ss")
 async def _sssearch(ctx,name):
