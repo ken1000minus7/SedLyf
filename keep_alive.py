@@ -1,9 +1,7 @@
 from flask import Flask
-# from replit.web import App
 from threading import Thread
 
 app = Flask('')
-# app = App('')
 
 @app.route('/')
 def home():
