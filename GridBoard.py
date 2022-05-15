@@ -2,7 +2,7 @@ import random
 
 class GridSpoilerGame:
     
-    def __init__(self, rickroll = 2, sips = 3):
+    def __init__(self, rickroll = -1, sips = -1):
         
         # Dictionary 
         self.emojiDict = {
@@ -46,16 +46,24 @@ class GridSpoilerGame:
         }
         
         self.grid = [[0 for i in range(6)] for j in range(6)]
+        
+        # If no input from user generate random
+        if (rickroll == -1):
+            rickroll = random.randint(4, 10)
+        if (sips == -1):
+            sips = random.randint(3, 7)
+        
         self.rickroll = rickroll
         self.sips = sips
+        # Normalise from below
+        if (rickroll < 2): self.rickroll = 2
+        if (sips < 2): self.sips = 2
         
-        if (rickroll + sips < 36 and rickroll + sips > 2):
+        if (self.rickroll + self.sips < 36 and self.rickroll + self.sips > 2):
             return
         
-        if (rickroll < 1): self.rickroll = 1
+        # Normalise from above
         if (rickroll > 19): self.rickroll = 19
-        
-        if (sips < 1): self.sips = 1
         if (sips > 17): self.sips = 16
 
     
@@ -80,6 +88,27 @@ class GridSpoilerGame:
         return self.__spoiler(self.__emojify(s))
     # Emoji Utility Ends ---------------------------    
     
+    
+    # Prepare Game Rules
+    def __rules(self):
+        extra_moves = [1] * 20 + [2] * 4 + [0] * 3 +[0] * 3 + [3] * 2 + [4] * 1
+        random.shuffle(extra_moves)
+        
+        sips_to_find = self.sips - max(1, extra_moves[0] - 1)
+        sips_to_find = max(2, sips_to_find)
+        
+        diff = max(0, self.sips - self.rickroll)
+        moves = sips_to_find + extra_moves[random.randint(0, len(extra_moves) - 1)]
+        
+        s = """**\t__Sips\t\t|\tRickRolls__**\n"""
+        
+        if self.sips // 10 == 0:
+            s += f"\t\t{self.sips} \t\t|\t{self.rickroll}"
+        else:
+            s += f"\t\t{self.sips}\t\t|\t{self.rickroll}"
+        s += f"\n\n**__To Find__**: `{sips_to_find} Sips in {moves} moves.`"
+        
+        return s
     
     
     # -------------------- Grid Utility Starts 
@@ -108,14 +137,16 @@ class GridSpoilerGame:
         random.shuffle(indexes)
         
         # Spoil some sips :big_sip:
+        sips = self.sips
+        
         for i in indexes:
-            if self.sips == 0:
+            if sips == 0:
                 break;
                 
             if i not in changed:
                 self.grid[i // 6][i % 6] = self.__spoiler_emojify(self.grid[i // 6][i % 6])
-                self.sips -= 1  
-                
+                sips -= 1  
+            
     # Directly use "print" function to print the grid (The only function one needs)
     def __str__(self):
         self.__make_fresh_grid()
@@ -140,4 +171,17 @@ class GridSpoilerGame:
                 
             grid += "\n"
         
-        return grid
+        return grid + self.__rules()
+        
+    # Grid Utility Ends --------------------
+    
+if __name__ == "__main__":
+    """
+    This is how you play
+    
+    game = GridSpoilerGame(2, 5) 
+    game = GridSpoilerGame()
+    game = GridSpoilerGame(2)
+    
+    print(game)
+    """

@@ -953,8 +953,8 @@ async def define(ctx,*arg):
 
 @bot.command(name="gs",aliases=["gridspoiler","siprickroll","sr"])
 
-async def gridspoiler(ctx,rickrolls=2,sips=3):
-  grid = GridSpoilerGame(rickrolls,sips)
+async def gridspoiler(ctx, rickrolls = -1, sips = -1):
+  grid = GridSpoilerGame(rickrolls, sips)
   await ctx.send(grid)
 
 guild_ids=[798268746744594465]
